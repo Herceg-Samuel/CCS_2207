@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>To-Do List</title>
+  </head>
+  <body>
+    <h1>To-Do List</h1>
+
+    <input type="text" id="task" placeholder="Enter task" />
+    <button onclick="addTask()">Add Task</button>
+    <ul id="taskList"></ul>
+
+    <script>
+      // Load tasks from localStorage when the page loads
+      window.onload = function () {
+        loadTasks();
+      };
+
+      // Function to add a new task
+      function addTask() {
+        const task = document.getElementById("task").value;
+
+        if (task.trim() !== "") {
+          createTaskElement(task);
+          saveTask(task); // Save to localStorage
+          document.getElementById("task").value = "";
+        }
+      }
+
+      // Function to create task element with Edit/Delete buttons
+      function createTaskElement(taskText) {
+        const li = document.createElement("li");
+
+        const taskSpan = document.createElement("span");
+        taskSpan.textContent = taskText;
+
+        // Delete button
+        const deleteBtn = document.createElement("button");
+        deleteBtn.textContent = "Delete";
+        deleteBtn.onclick = function () {
+          li.remove();
+          removeTask(taskSpan.textContent); // Remove from localStorage
+        };
+
+        // Edit button
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "Edit";
+        editBtn.onclick = function () {
+          const newTask = prompt("Edit task:", taskSpan.textContent);
+          if (newTask !== null && newTask.trim() !== "") {
+            // Update text
+            const oldTask = taskSpan.textContent;
+            taskSpan.textContent = newTask;
+            updateTask(oldTask, newTask); // Update in localStorage
+          }
+        };
+
+        li.appendChild(taskSpan);
+        li.appendChild(editBtn);
+        li.appendChild(deleteBtn);
+
+        document.getElementById("taskList").appendChild(li);
+      }
+
+      // Save task to localStorage
+      function saveTask(task) {
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        tasks.push(task);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+
+      // Load tasks from localStorage
+      function loadTasks() {
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        tasks.forEach((task) => {
+          createTaskElement(task);
+        });
+      }
+
+      // Remove task from localStorage
+      function removeTask(task) {
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        tasks = tasks.filter((t) => t !== task);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+      }
+
+      // Update task in localStorage
+      function updateTask(oldTask, newTask) {
+        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+        const index = tasks.indexOf(oldTask);
+        if (index !== -1) {
+          tasks[index] = newTask;
+          localStorage.setItem("tasks", JSON.stringify(tasks));
+        }
+      }
+    </script>
+  </body>
+</html>
