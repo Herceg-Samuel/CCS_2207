@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Countdown Timer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: start;
+        margin-top: 50px;
+      }
+      input {
+        padding: 10px;
+        font-size: 16px;
+        width: 200px;
+      }
+      button {
+        padding: 10px 15px;
+        font-size: 16px;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Countdown Timer</h1>
+      <div>
+        <h3>Add number of seconds</h3>
+        <input id="seconds" name="seconds" placeholder="Input seconds" />
+        <button id="start">Start</button>
+        <button id="pause">Pause</button>
+        <button id="reset">Reset</button>
+      </div>
+    </main>
+    <script>
+      let countdown;
+      const timerDisplay = document.createElement("h2");
+      document.body.appendChild(timerDisplay);
+      const secondsInput = document.getElementById("seconds");
+      const startButton = document.getElementById("start");
+      const pauseButton = document.getElementById("pause");
+      const resetButton = document.getElementById("reset");
+
+      let timeLeft = 0;
+      let isPaused = false;
+
+      function updateDisplay() {
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.textContent = `${minutes}:${
+          seconds < 10 ? "0" : ""
+        }${seconds}`;
+      }
+
+      function timerTick() {
+        if (!isPaused && timeLeft > 0) {
+          timeLeft--;
+          updateDisplay();
+        } else if (timeLeft === 0) {
+          clearInterval(countdown);
+        }
+      }
+
+      startButton.addEventListener("click", () => {
+        if (timeLeft === 0) {
+          timeLeft = parseInt(secondsInput.value, 10) || 0;
+          updateDisplay();
+        }
+        isPaused = false;
+        clearInterval(countdown);
+        countdown = setInterval(timerTick, 1000);
+      });
+
+      pauseButton.addEventListener("click", () => {
+        isPaused = true;
+      });
+
+      resetButton.addEventListener("click", () => {
+        clearInterval(countdown);
+        timeLeft = 0;
+        updateDisplay();
+      });
+
+      updateDisplay();
+    </script>
+  </body>
+</html>

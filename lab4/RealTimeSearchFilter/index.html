@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dynamic List Filter</title>
+    <style>
+      /* Basic styling */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      input {
+        margin-bottom: 10px;
+        padding: 5px;
+        width: 300px;
+        font-size: 16px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        padding: 5px;
+        border: 1px solid #ddd;
+        margin-bottom: 5px;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Search and Filter List</h1>
+
+    <input type="text" id="searchBox" placeholder="Type to search items..." />
+
+    <ul id="itemList">
+      <li>Apple</li>
+      <li>Banana</li>
+      <li>Cherry</li>
+      <li>Date</li>
+      <li>Elderberry</li>
+      <li>Fig</li>
+      <li>Grape</li>
+      <li>Honeydew</li>
+    </ul>
+
+    <script>
+      // Add a keyup event listener to the search box
+      document
+        .getElementById("searchBox")
+        .addEventListener("keyup", function () {
+          // Get the search query, converted to lowercase for case-insensitivity
+          const query = this.value.toLowerCase();
+
+          // Get all list items
+          const items = document.querySelectorAll("#itemList li");
+
+          // Loop through items and check if they include the query
+          items.forEach((item) => {
+            // Convert item text to lowercase and check if it includes the query
+            if (item.textContent.toLowerCase().includes(query)) {
+              item.classList.remove("hidden"); // Show matching items
+            } else {
+              item.classList.add("hidden"); // Hide non-matching items
+            }
+          });
+        });
+    </script>
+  </body>
+</html>
